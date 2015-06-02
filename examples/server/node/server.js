@@ -92,8 +92,8 @@ function ensureAuthenticated(req, res, next) {
   try {
     payload = jwt.decode(token, config.TOKEN_SECRET);
   }
-  catch (err){
-    return res.status(401).send({message: err.message});
+  catch (err) {
+    return res.status(401).send({ message: err.message });
   }
 
   if (payload.exp <= moment().unix()) {
@@ -611,7 +611,7 @@ app.post('/auth/twitter', function(req, res) {
       res.send(oauthToken);
     });
   } else {
-      // Part 2 of 2: Second request after Authorize app is clicked.
+    // Part 2 of 2: Second request after Authorize app is clicked.
     var accessTokenOauth = {
       consumer_key: config.TWITTER_KEY,
       consumer_secret: config.TWITTER_SECRET,
@@ -631,7 +631,11 @@ app.post('/auth/twitter', function(req, res) {
       };
 
       // Step 4. Retrieve profile information about the current user.
-      request.get({ url: profileUrl + accessToken.screen_name, oauth: profileOauth, json: true }, function(err, response, profile) {
+      request.get({
+        url: profileUrl + accessToken.screen_name,
+        oauth: profileOauth,
+        json: true
+      }, function(err, response, profile) {
 
         // Step 5a. Link user accounts.
         if (req.headers.authorization) {

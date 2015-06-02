@@ -1,9 +1,10 @@
 {
   "name": "satellizer",
   "description": "Token-based AngularJS Authentication",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "scripts": {
     "start": "node ./examples/server/node/server.js",
+    "postinstall": "gulp copy && gulp php",
     "test": "karma start"
   },
   "main": "satellizer.min.js",

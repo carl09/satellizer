@@ -1,5 +1,5 @@
 /**
- * Satellizer 0.10.1
+ * Satellizer 0.11.0
  * (c) 2015 Sahat Yalkabov
  * License: MIT
  */
@@ -374,7 +374,7 @@
       '$q',
       '$http',
       'satellizer.config',
-	  'satellizer.',
+      'satellizer.utils',
       'satellizer.shared',
       'satellizer.Oauth1',
       'satellizer.Oauth2',
@@ -398,12 +398,13 @@
         };
 
         oauth.unlink = function(provider) {
-			var unlinkUrl = config.baseUrl ? utils.joinUrl(config.baseUrl, config.unlinkUrl) : config.unlinkUrl;
-			if (config.unlinkMethod === 'get') {
-				return $http.get(unlinkUrl + provider);
-			} else if (config.unlinkMethod === 'post') {
-				return $http.post(unlinkUrl, provider);
-			}
+          var unlinkUrl =  config.baseUrl ? utils.joinUrl(config.baseUrl, config.unlinkUrl) : config.unlinkUrl;
+
+          if (config.unlinkMethod === 'get') {
+            return $http.get(unlinkUrl + provider);
+          } else if (config.unlinkMethod === 'post') {
+            return $http.post(unlinkUrl, provider);
+          }
         };
 
         return oauth;
@@ -753,8 +754,12 @@
         return obj;
       };
 
-      this.joinUrl = function() {
-        var joined = Array.prototype.slice.call(arguments, 0).join('/');
+      this.joinUrl = function(baseUrl, url) {
+        if (/^(?:[a-z]+:)?\/\//i.test(url)) {
+          return url;
+        }
+
+        var joined = [baseUrl, url].join('/');
 
         var normalize = function(str) {
           return str
@@ -815,8 +820,7 @@
             if (request.skipAuthorization) {
               return request;
             }
-
-            if (shared.isAuthenticated() && config.httpInterceptor) {
+             if (shared.isAuthenticated() && config.httpInterceptor) {
               var tokenName = config.tokenPrefix ? config.tokenPrefix + '_' + config.tokenName : config.tokenName;
               var token = storage.get(tokenName);
 

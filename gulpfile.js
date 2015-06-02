@@ -25,10 +25,10 @@ gulp.task('minify', function() {
 gulp.task('copy', ['minify'], function() {
   return gulp.src('satellizer.js')
     .pipe(gulp.dest('examples/client/vendor'))
-    .pipe(gulp.dest('examples/ionic/www/lib/satellizer'));
+    .pipe(gulp.dest('examples/ionic/www/lib'));
 });
 
-gulp.task('client', function() {
+gulp.task('php', function() {
   return gulp.src('examples/client/**/*.*')
     .pipe(gulp.dest('examples/server/php/public'));
 });
@@ -39,7 +39,7 @@ gulp.task('complexity', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('satellizer.js', ['copy', 'client', 'minify']);
+  gulp.watch('satellizer.js', ['copy', 'php', 'minify']);
 });
 
-gulp.task('default', ['copy', 'client', 'watch']);
+gulp.task('default', ['copy', 'php', 'watch']);
