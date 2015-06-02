@@ -374,10 +374,11 @@
       '$q',
       '$http',
       'satellizer.config',
+	  'satellizer.',
       'satellizer.shared',
       'satellizer.Oauth1',
       'satellizer.Oauth2',
-      function($q, $http, config, shared, Oauth1, Oauth2) {
+      function($q, $http, config, utils, shared, Oauth1, Oauth2) {
         var oauth = {};
 
         oauth.authenticate = function(name, redirect, userData) {
@@ -397,11 +398,12 @@
         };
 
         oauth.unlink = function(provider) {
-          if (config.unlinkMethod === 'get') {
-            return $http.get(config.unlinkUrl + provider);
-          } else if (config.unlinkMethod === 'post') {
-            return $http.post(config.unlinkUrl, provider);
-          }
+			var unlinkUrl = config.baseUrl ? utils.joinUrl(config.baseUrl, config.unlinkUrl) : config.unlinkUrl;
+			if (config.unlinkMethod === 'get') {
+				return $http.get(unlinkUrl + provider);
+			} else if (config.unlinkMethod === 'post') {
+				return $http.post(unlinkUrl, provider);
+			}
         };
 
         return oauth;
